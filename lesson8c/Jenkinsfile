@@ -25,7 +25,7 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
       
 
         stage('VPC Production Creation'){
-               
+                parallel {
                   stage('Create VPC'){    
                      when { 
                          expression { params.CREATE_VPC  && params.PROD }
@@ -46,7 +46,7 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
                         }   
                    }
                 }
-				
+			}	
                   stage('Destroy VPC'){    
                      when { 
                          expression { params.DESTROY_VPC && params.PROD}
