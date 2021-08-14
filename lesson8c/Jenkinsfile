@@ -40,7 +40,7 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
                             
                             terraform init  -input=false
                             terraform plan -out prod_plan -input=false
-                            terraform apply prod_plan -auto-approve -input=false
+                            terraform apply prod_plan -auto-approve 
                             """
                              } 
                         }   
