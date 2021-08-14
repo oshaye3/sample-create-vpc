@@ -1,1 +1,75 @@
+pipeline {
+  agent { 
+    label 'master'
+  }
 
+    environment {
+	AWS_ACCESS_KEY_ID     = credentials('michael-personal-aws-key')
+AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
+		PATH = "/usr/local/bin:~/.tfenv/bin/:$PATH"
+    } 
+    
+    parameters {
+        booleanParam(name: 'PROD', defaultValue: false, description: "select your option PROD before you can create or destroy")
+        booleanParam(name: 'CREATE_VPC', defaultValue: false, description: "Create VPC")
+        booleanParam(name: 'DESTROY_VPC',  defaultValue: false, description: "Destroy VPC")
+    }
+	
+	stages {
+        stage('Services') {
+            steps {
+                echo "Please select the PROD : ${params.PROD}"
+            }
+        }
+    
+      
+
+        stage('VPC Production Creation'){
+                parallel {
+                  stage('Create VPC'){    
+                     when { 
+                         expression { params.CREATE_VPC  && params.PROD }
+                     }
+                        steps {
+                            script {
+                             dir("./lesson8c") {
+                                  
+                            sh """
+                            pwd
+                            rm -rf .terraform
+                            
+                            terraform init  -input=false
+                            terraform plan -out -input=false
+                            terraform apply -auto-approve -input=false
+                            """
+                             } 
+                        }   
+                   }
+                }     
+                  stage('Destroy VPC'){    
+                     when { 
+                         expression { params.DESTROY_VPC && params.PROD}
+                     }
+                        steps {
+                            script {
+							dir("./lesson8c"){
+                                sh """  
+                                 
+                                  terraform destroy -auto-approve -input=false
+                                  """
+								  
+								  }
+                            }    
+                        }
+                   }   
+            }  
+        }
+    }
+ // To keep Jenkins clean we run always this 
+  post {
+      always {
+        deleteDir()
+      }
+ } 
+    
+ }
