@@ -1,5 +1,5 @@
 pipeline {
-  agent { 
+  agent {
     label 'master'
   }
 
@@ -25,7 +25,7 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
       
 
         stage('VPC Production Creation'){
-                parallel {
+               
                   stage('Create VPC'){    
                      when { 
                          expression { params.CREATE_VPC  && params.PROD }
@@ -39,8 +39,8 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
                             rm -rf .terraform
                             
                             terraform init  -input=false
-                            terraform plan -out -input=false
-                            terraform apply -auto-approve -input=false
+                            terraform plan -out prod_plan -input=false
+                            terraform apply prod_plan -auto-approve -input=false
                             """
                              } 
                         }   
@@ -55,16 +55,16 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
 							dir("./lesson8c"){
                                 sh """  
                                  
-                                   terraform destroy -auto-approve
+                                  terraform destroy prod_plan -auto-approve
                                   """
 								  
 								  }
                             }    
                         }
                    }   
-            }  
+             
         }
     }
 
-    
+ 
  }
