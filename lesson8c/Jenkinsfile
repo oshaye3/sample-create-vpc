@@ -55,7 +55,7 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
 							dir("./lesson8c"){
                                 sh """  
                                  
-                                  terraform destroy -auto-approve -input=false
+                                   terraform destroy -auto-approve
                                   """
 								  
 								  }
