@@ -39,8 +39,8 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
                             rm -rf .terraform
                             
                             terraform init  -input=false
-                            terraform plan -out prod_plan -input=false
-                            terraform apply prod_plan -auto-approve 
+                            terraform plan  -input=false
+                            terraform apply  -auto-approve 
                             """
                              } 
                         }   
@@ -56,7 +56,7 @@ AWS_SECRET_ACCESS_KEY = credentials('michael-personal-aws-key')
 							dir("./lesson8c"){
                                 sh """  
                                  
-                                  terraform destroy prod_plan -auto-approve
+                                  terraform destroy  -auto-approve
                                   """
 								  
 								  }
